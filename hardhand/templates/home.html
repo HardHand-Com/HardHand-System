@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HardHand</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            function switchMode() {
+                // Najde body element
+                var body = document.body;
+                // Pokud má třídu "light", přepne na "dark" a naopak
+                if (body.classList.contains('light')) {
+                    body
+                        .classList
+                        .remove('light');
+                    body
+                        .classList
+                        .add('dark');
+                } else {
+                    body
+                        .classList
+                        .remove('dark');
+                    body
+                        .classList
+                        .add('light');
+                }
+            }
+        </script>
+        <style>
+            body {
+                transition: background-color 0.3s ease;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            body.light table {
+                width: 100%;
+                border-collapse: collapse;
+                /*margin-top: 20px;*/ /*the space between category*/
+                border-radius: 8px;
+                overflow: hidden;
+                background-color: #f4e9ef;
+            }
+
+            body.light td,
+            body.light th {
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+                padding: 5px 10px;
+                height: 25px;
+            }
+
+            body.light th {
+                background-color: #ff4444;
+            }
+
+            body.light tr {
+                color: #fff;
+            }
+
+            .input-id {
+                width: -webkit-fill-available;
+                height: -webkit-fill-available;
+                border-radius: 8px;
+                border: none;
+                text-align: center;
+            }
+
+            .input-password,
+            .input-username {
+                width: -webkit-fill-available;
+                height: -webkit-fill-available;
+                border-radius: 8px;
+                border: none;
+                text-align: left;
+                padding: 0 10px;
+                font-size: 16px;
+            }
+
+            body.light .details-modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            body.light .details-content {
+                background: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 300px;
+            }
+
+            .details,
+            .edites {
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+                border: none !important;
+            }
+            /* fuck it, just random line here, but in old code there isnt*/
+
+            .cancel-btn,
+            .delete-btn,
+            .edit-btn,
+            .save-btn,
+            .show-btn {
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                width: -webkit-fill-available;
+                /* Změna šířky na 49% */
+                min-height: 25px;
+            }
+
+            body.light .edit-btn {
+                background-color: #fff;
+                color: #171D1C;
+            }
+
+            body.light .save-btn {
+                background-color: #9DD65C;
+                color: #171D1C;
+            }
+
+            body.light .cancel-btn {
+                background-color: #EE596A;
+                color: #171D1C;
+            }
+
+            body.light .delete-btn {
+                background-color: #D32240;
+                color: #f4e9ef;
+            }
+
+            .show-btn {
+                display: none;
+                margin: 0;
+            }
+
+            .edit-buttons {
+                display: none;
+            }
+
+            body {
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            }
+
+            body.light .edit-btn-modal {
+                background-color: #fff;
+                color: #171D1C;
+                margin-top: 10px;
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                width: -webkit-fill-available;
+                /* Změna šířky na 49% */
+                max-width: 200px;
+                min-height: 25px;
+            }
+
+            .cancel-btn-modal,
+            .save-btn-modal {
+                display: none;
+                width: -webkit-fill-available;
+                margin-top: 10px;
+                max-width: 100px;
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                min-height: 30px;
+            }
+
+            body.light .save-btn-modal {
+                background-color: #9DD65C;
+                color: #171D1C;
+            }
+
+            body.light .cancel-btn-modal {
+                background-color: #EE596A;
+                color: #171D1C;
+            }
+
+            body.light .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: #EE596A;
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            body.light .details-content {
+                background: #f4e9ef;
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 300px;
+                position: relative;
+                margin-top: 60px;
+            }
+
+            body.light .close-btn-details {
+                position: absolute;
+                top: -55px;
+                right: -15px;
+                width: 40px;
+                height: 40px;
+                background-color: #EE596A;
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                padding: 10px;
+                cursor: pointer;
+            }
+            body.light .delete-btn-modal {
+                display: none;
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                width: -webkit-fill-available;
+                /* Změna šířky na 49% */
+                background-color: #D32240;
+                color: #f4e9ef;
+                max-width: 200px;
+                min-height: 25px;
+            }
+            #modalId,
+            #modalPassword,
+            #modalUsername {
+                width: 90%;
+                min-height: 25px;
+                border-radius: 8px;
+                border: none;
+                font-size: 85%;
+                text-align: center;
+            }
+
+            body.light .category-buttons {
+                background-color: #f4e9ef;
+                border-radius: 25px;
+                display: flex;
+                justify-content: space-evenly;
+                height: 40px;
+                padding: 1px;
+            }
+
+            body.light .category-button {
+                transition-duration: 0.5s;
+                width: -webkit-fill-available;
+                border: solid 1.5px;
+                border-top: none;
+                border-bottom: none;
+                background-color: #ff4444;
+                color: #171D1C;
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                font-weight: bold;
+                border-color: #f4e9ef;
+                font-size: large;
+                color: #fff;
+                cursor: pointer;
+            }
+
+            body.light .category-button:first-child {
+                border-radius: 25px 0 0 25px;
+                border: none;
+                border-right: solid #f4e9ef 1.5px !important;
+            }
+            body.light .category-button:last-child {
+                border-radius: 0 25px 25px 0;
+                border: none !important;
+                border-left: solid #f4e9ef 1.5px !important;
+            }
+
+            body.light .category-button:hover {
+                transition-duration: 0.5s;
+                background-color: #ff444499;
+            }
+
+            body.light .category-button:hover {
+                transition-duration: 0.25s;
+                color: #171D1C;
+            }
+
+            body.light #active-content {
+                border-top: solid #ff4444 35px;
+                border-radius: 8px;
+                background-color: #f4e9ef;
+                min-height.active-infos {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                }
+            }
+
+            .input-active-2fa,
+            .input-active-password,
+            .input-active-username {
+                width: -webkit-fill-available;
+                height: -webkit-fill-available;
+                border-radius: 8px;
+                border: none;
+                text-align: left;
+                padding: 0 10px;
+                font-size: 16px;
+                min-height: 25px;
+                margin-top: 15px;
+            }
+
+            .input-active-2fa {
+                margin: 10px 20px;
+                text-align: center;
+                font-weight: bold;
+                letter-spacing: 10px;
+            }
+
+            #active-2fa {
+                position: relative;
+                top: -35px;
+            }
+
+            body.light .active-password,
+            body.light .active-username {
+                /*width: -webkit-fill-available;*/
+                width: 30%;
+                min-width: 200px;
+                border: solid 1px #ff4444;
+                margin: 20px 0;
+                border-radius: 9px;
+            }
+
+            body.light .active-controll {
+                margin-top: 30px;
+                border-top: solid #ff4444 35px;
+            }
+
+            .active-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .active-buttons-con {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-evenly;
+                width: -webkit-fill-available;
+                max-width: 650px;
+            }
+
+            body.light .active-button {
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                /*width: -webkit-fill-available; /* Změna šířky na 49% */
+                width: 30%;
+                min-height: 25px;
+                background-color: #ff4444;
+                height: 35px;
+                font-size: large;
+                color: #fff;
+            }
+
+            body.light .active-button[disabled] {
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                /*width: -webkit-fill-available; /* Změna šířky na 49% */
+                width: 30%;
+                min-height: 25px;
+                background-color: #fdb3c4;
+                height: 35px;
+                font-size: large;
+                color: #121212;
+            }
+
+            body.light .active-subtitle {
+                background-color: #ff4444;
+                color: #fff;
+                border-radius: 8px;
+                padding: 0 5px;
+                margin: 0;
+            }
+
+            body.light #active-full-status {
+                background-color: #ff4444;
+                color: #fff;
+                border-radius: 8px;
+                padding: 0 5px 2px;
+                position: relative;
+                margin: 0 auto;
+                top: -30px;
+                text-align: center;
+                width: fit-content;
+            }
+
+            @media only screen and (max-width: 767px) {
+                /* Pro obrazovky s maximální šířkou 767px (telefony) */
+                .edites {
+                    flex-direction: row;
+                    /*min-width: 100px;*/
+                }
+
+                .details {
+                    display: none;
+                }
+
+                .details-modal {
+                    align-items: flex-start;
+                }
+
+                body.light .details-content input {
+                    border: none;
+                    text-align: center;
+                    background-color: #F5F5F5;
+                }
+
+                body.light .details-content {
+                    max-width: 100%;
+                    padding-top: 0;
+                    border-top: #ff4444 solid 35px;
+                }
+
+                body.light .show-btn {
+                    transition-duration: 0.5s;
+                    background-color: #ff4444;
+                    color: #fff;
+                }
+
+                .show-btn {
+                    display: block;
+                }
+
+                #thdelete,
+                #thid,
+                #thpassword,
+                .delete-btn,
+                .details-modal,
+                .input-id,
+                .input-password {
+                    display: none;
+                }
+
+                .edit-btn {
+                    display: none !important;
+                }
+
+                body.light .show-btn:hover {
+                    transition-duration: 0.5s;
+                    background-color: #ff444499;
+                }
+
+                body.light .show-btn:hover {
+                    transition-duration: 0.25s;
+                    color: #171D1C;
+                }
+
+                /*.show-btn {
+                min-width: 100px;
+            }*/
+            }
+            @media only screen and (max-width: 400px) {
+                .category-button {
+                    font-size: medium !important;
+                }
+            }
+        </style>
+        <style>
+            body.dark {
+                background-color: #1f1f1f;
+            }
+
+            body.dark {
+                color: #bfbfbf !important;
+                background-image: none !important;
+                background: #1f1f1f !important;
+            }
+            .active-infos {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-evenly;
+            }
+            body.dark button,
+            body.dark input,
+            body.dark select,
+            body.dark textarea {
+                color: #bfbfbf;
+                background-color: #1f1f1f;
+                border-color: #616161 !important;
+            }
+            body.dark table {
+                width: 100%;
+                border-collapse: collapse;
+                /*margin-top: 20px;*/
+                border-radius: 8px;
+                overflow: hidden;
+                background-color: rgb(41, 41, 41);
+            }
+
+            body.dark td,
+            body.dark th {
+                text-align: left;
+                border-bottom: 1px solid rgb(59, 59, 59);
+                padding: 5px 10px;
+                height: 25px;
+            }
+
+            body.dark th {
+                background-color: rgb(192, 48, 48);
+            }
+
+            body.dark tr {
+                color: #fff;
+            }
+
+            body.dark .details-modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            body.dark .details-content {
+                background: rgb(41, 41, 41);
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 300px;
+            }
+
+            body.dark .edit-btn {
+                background-color: rgb(28, 28, 33);
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark .save-btn {
+                background-color: rgb(157, 214, 92);
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark .cancel-btn {
+                background-color: rgb(188, 47, 63);
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark .delete-btn {
+                background-color: rgb(196, 49, 73);
+                color: rgb(245, 235, 240);
+            }
+
+            body.dark .edit-btn-modal {
+                background-color: rgb(28, 28, 33);
+                color: rgb(191, 191, 191);
+                margin-top: 10px;
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                width: -webkit-fill-available;
+                /* Změna šířky na 49% */
+                max-width: 200px;
+                min-height: 25px;
+            }
+
+            body.dark .save-btn-modal {
+                background-color: rgb(157, 214, 92);
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark .cancel-btn-modal {
+                background-color: rgb(188, 47, 63);
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: #EE596A;
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            body.dark .details-content {
+                background: rgb(41, 41, 41);
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 300px;
+                position: relative;
+                margin-top: 60px;
+            }
+
+            body.dark .close-btn-details {
+                position: absolute;
+                top: -55px;
+                right: -15px;
+                width: 40px;
+                height: 40px;
+                background-color: rgb(188, 47, 63);
+                color: rgb(255, 255, 255);
+                border: none;
+                border-radius: 25px;
+                padding: 10px;
+                cursor: pointer;
+            }
+            body.dark .delete-btn-modal {
+                display: none;
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                width: -webkit-fill-available;
+                /* Změna šířky na 49% */
+                background-color: rgb(196, 49, 73);
+                color: rgb(245, 235, 240);
+                max-width: 200px;
+                min-height: 25px;
+            }
+
+            body.dark .category-buttons {
+                background-color: rgb(41, 41, 41);
+                border-radius: 25px;
+                display: flex;
+                justify-content: space-evenly;
+                height: 40px;
+                padding: 1px;
+            }
+
+            body.dark .category-button {
+                transition-duration: 0.5s;
+                width: -webkit-fill-available;
+                border-right: 1.5px solid #1f1f1f;
+                border-left: 1.5px solid #1f1f1f;
+                border-image: initial;
+                border-top: none #1f1f1f;
+                border-bottom: none #1f1f1f;
+                /*rgb(41, 41, 41)*/
+                background-color: rgb(192, 48, 48);
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+                font-weight: bold;
+                font-size: large;
+                color: rgb(255, 255, 255);
+                cursor: pointer;
+                border-color: #1f1f1f !important;
+            }
+
+            body.dark .category-button:first-child {
+                border-radius: 25px 0 0 25px;
+                border: none;
+                border-right: 1.5px solid #1f1f1f !important;
+            }
+            body.dark .category-button:last-child {
+                border-radius: 0 25px 25px 0;
+                border: none !important;
+                border-left: 1.5px solid #1f1f1f !important;
+            }
+
+            body.dark .category-button:hover {
+                transition-duration: 0.5s;
+                background-color: rgba(192, 48, 48, 0.6);
+            }
+
+            body.dark .category-button:hover {
+                transition-duration: 0.25s;
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark #active-content {
+                border-top: 35px solid rgb(192, 48, 48);
+                border-radius: 8px;
+                background-color: rgb(41, 41, 41);
+                min-height.active-infos {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-evenly;
+                }
+            }
+
+            body.dark .active-password,
+            body.dark .active-username {
+                /*width: -webkit-fill-available;*/
+                width: 30%;
+                min-width: 200px;
+                border: 1px solid rgb(192, 48, 48);
+                margin: 20px 0;
+                border-radius: 9px;
+            }
+
+            body.dark .active-controll {
+                margin-top: 30px;
+                border-top: 35px solid rgb(192, 48, 48);
+            }
+
+            body.dark .active-button {
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                /*width: -webkit-fill-available; /* Změna šířky na 49% */
+                width: 30%;
+                min-height: 25px;
+                background-color: rgb(192, 48, 48);
+                height: 35px;
+                font-size: large;
+                color: rgb(255, 255, 255);
+            }
+
+            body.dark .active-button[disabled] {
+                border-radius: 8px;
+                cursor: pointer;
+                border: none;
+                font-weight: bold;
+                margin: 5px 0;
+                /*width: -webkit-fill-available; /* Změna šířky na 49% */
+                width: 30%;
+                min-height: 25px;
+                background-color: rgb(102, 26, 43);
+                height: 35px;
+                font-size: large;
+                color: rgb(191, 191, 191);
+            }
+
+            body.dark .active-subtitle {
+                background-color: rgb(192, 48, 48);
+                color: rgb(255, 255, 255);
+                border-radius: 8px;
+                padding: 0 5px;
+                margin: 0;
+            }
+
+            body.dark #active-full-status {
+                background-color: rgb(192, 48, 48);
+                color: rgb(255, 255, 255);
+                border-radius: 8px;
+                padding: 0 5px 2px;
+                position: relative;
+                margin: 0 auto;
+                top: -30px;
+                text-align: center;
+                width: fit-content;
+            }
+
+            /* title */
+            .systemTitle {
+                margin: 0 auto;
+                width: min-content;
+                display: flex;
+                flex-direction: row;
+                gap: 3%;
+                justify-content: center;
+                margin-top: 10px;
+                margin-bottom: 10px;
+
+            }
+
+            body.light h1.sysTitleName,
+            body.light h2.sysTitleName {
+                color: #171D1C;
+            }
+
+            body.dark h1.sysTitleName,
+            body.dark h2.sysTitleName {
+                color: rgb(191, 191, 191);
+            }
+
+            h1.sysTitleName,
+            h2.sysTitleName {
+                margin: 0;
+                font-weight: 900;
+                font-size: 30px;
+                width: min-content;
+            }
+
+            h6.sysTitleName {
+                margin: 0;
+                font-weight: 900;
+                font-size: 30px;
+            }
+
+            h6#webVersion {
+                margin: 0;
+            }
+
+            /*No title*/
+
+            @media only screen and (max-width: 767px) {
+                body.dark .details-content input {
+                    border: none;
+                    text-align: center;
+                    background-color: rgb(36, 36, 36);
+                }
+
+                body.dark .details-content {
+                    max-width: 100%;
+                    padding-top: 0;
+                    border-top: 35px solid rgb(192, 48, 48);
+                }
+
+                body.dark .show-btn {
+                    transition-duration: 0.5s;
+                    background-color: rgb(192, 48, 48);
+                    color: rgb(255, 255, 255);
+                }
+
+                body.dark .show-btn:hover {
+                    transition-duration: 0.5s;
+                    background-color: rgba(192, 48, 48, 0.6);
+                }
+
+                body.dark .show-btn:hover {
+                    transition-duration: 0.25s;
+                    color: rgb(191, 191, 191);
+                }
+                .systemTitle {
+                    /*top: 215px;*/
+                    /*position: absolute;*/
+                    display: flex !important;
+                    flex-wrap: wrap !important;
+                    flex-direction: column !important;
+                    align-items: center !important;
+                    margin-bottom: 0 !important;
+                    margin-top: 0 !important;
+                }
+                h6.sysTitleName {
+                    margin: 10px 0 0;
+                    font-weight: 900;
+                    letter-spacing: 6px;
+                    top: -5px;
+                    position: relative;
+                    font-size: 18px;
+                    padding: 0 0 0 6px;
+                }
+
+                h2.sysTitleName {
+                    top: -5px;
+                    position: relative;
+                    letter-spacing: 10px;
+                    padding-left: 13px;
+                }
+
+                body.light h6.sysTitleName {
+                    color: #ff4444;
+                }
+
+                body.dark h6.sysTitleName {
+                    color: rgb(230, 153, 153);
+                }
+
+            }
+        </style>
+    </head>
+
+    <body class="light">
+        <div class="systemTitle" id="systemTitle">
+            <h1 class="sysTitleName">HardHand</h1>
+            <h6 class="sysTitleName">Community</h6>
+            <h2 class="sysTitleName">System</h2>
+        </div>
+        <div class="category-buttons">
+            <button class="category-button" onclick="switchCategory('database')">Database</button>
+            <button class="category-button" onclick="switchCategory('activities')">Activities</button>
+            <button class="category-button" onclick="switchCategory('setting')">Setting</button>
+            <a
+                style="display: flex; justify-content: center; align-items: center; text-decoration: none;"
+                class="category-button"
+                href="{{ url_for('logout') }}">logout</a>
+        </div>
+        <!--<p>Your role is:
+            {{ role }}</p>-->
+        <br>
+        <div id="database-content" class="category-content">
+            <table border="1">
+                <tr>
+                    <th id="thid">ID</th>
+                    <th style="text-align: center;" id="thusername">Username</th>
+                    <th style="text-align: center;" id="thpassword">Password</th>
+                    <th style="text-align: center;" id="thaction">Action</th>
+                    <th style="text-align: center;" id="thdelete">Delete</th>
+                </tr>
+                {% for data in mongo_data %}
+                    <tr>
+                        <form method="POST" action="{{ url_for('update_row') }}">
+                            <td id="thid"><input
+                                type="text"
+                                readonly="readonly"
+                                value="{{ data['_id'] }}"
+                                name="id"
+                                class="input-id"></td>
+                            <td id="thusername"><input
+                                type="text"
+                                readonly="readonly"
+                                value="{{ data['username'] }}"
+                                name="username"
+                                class="input-username"></td>
+                            <td id="thpassword"><input
+                                type="text"
+                                readonly="readonly"
+                                value="{{ data['password'] }}"
+                                name="password"
+                                class="input-password"></td>
+                            <td id="thaction" class="action-buttons edites">
+                                <button type="button" class="edit-btn" onclick="editRow(this)">Upravit</button>
+                                <button type="submit" class="save-btn" style="display:none;">Uložit</button>
+                                <button
+                                    type="button"
+                                    class="cancel-btn"
+                                    onclick="cancelEdit(this)"
+                                    style="display:none;">Zrušit</button>
+                                <button type="button" class="show-btn" onclick="showDetails(this)">Show</button>
+                            </td>
+                            <td id="thdelete" class="action-buttons">
+                                <button
+                                    type="button"
+                                    class="delete-btn"
+                                    onclick="deleteDetailsRow('{{ data['_id'] }}')">Odstranit</button>
+                            </td>
+                        </form>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="details-modal" id="detailsModal">
+            <div class="details-content" id="detailsContent">
+                <button class="close-btn-details" onclick="hideDetails()">X</button>
+                <p style="margin-top: 0px;">
+                    <strong>ID:</strong>
+                    <input type="text" readonly="readonly" id="modalId"></p>
+                <p>
+                    <strong>Username:</strong>
+                    <input type="text" readonly="readonly" id="modalUsername"></p>
+                <p>
+                    <strong>Password:</strong>
+                    <input type="text" readonly="readonly" id="modalPassword"></p>
+                <button type="button" class="edit-btn-modal" onclick="editDetails()">Upravit</button>
+                <button
+                    type="submit"
+                    class="save-btn-modal"
+                    style="display:none;"
+                    onclick="saveDetails()">Uložit</button>
+                <button
+                    type="button"
+                    class="cancel-btn-modal"
+                    onclick="cancelEditDetails()"
+                    style="display:none;">Zrušit</button>
+                <button type="button" class="delete-btn-modal" onclick="deleteDetails()">Odstranit</button>
+            </div>
+        </div>
+
+        <div id="activities-content" class="category-content" style="display: none;">
+            <div id="active-content">
+                <h2
+                    class="active-status"
+                    style="top: -35px; margin: 0px 0px 0px 0px; position: relative; text-align: center; color: #fff;">User</h2>
+                <h4 id="active-full-status" class="active-full-status">Status</h4>
+                <div class="active-infos" style="top: -35px;position: relative;">
+                    <div class="active-username">
+                        <h3 class="active-subtitle" style="width: min-content;">Usernames</h3>
+                        <!--<input type="text" readonly="readonly" value="username" name="username"
+                        class="input-active-username" style="display: block;"> <input type="text"
+                        readonly="readonly" value="username" name="username"
+                        class="input-active-username" style="display: block;"> <input type="text"
+                        readonly="readonly" value="username" name="username"
+                        class="input-active-username" style="display: block;">-->
+                    </div>
+                    <div class="active-password">
+                        <h3 class="active-subtitle" style="width: min-content;">Passwords</h3>
+                        <!--<input type="text" readonly="readonly" value="password" name="password"
+                        class="input-active-password" style="display: block;"> <input type="text"
+                        readonly="readonly" value="password" name="password"
+                        class="input-active-password" style="display: block;"> <input type="text"
+                        readonly="readonly" value="password" name="password"
+                        class="input-active-password" style="display: block;">-->
+                    </div>
+                </div>
+                <div id="active-2fa" style="text-align: center;">
+                    <h3 class="active-subtitle">2FA</h3>
+                    <input
+                        type="text"
+                        readonly="readonly"
+                        value="None"
+                        name="2fa"
+                        id="input-active-2fa"
+                        class="input-active-2fa"
+                        style="display: block;">
+                </div>
+                <div class="active-controll" style="top: -35px;position: relative;">
+                    <h2
+                        style="top: -35px; margin: 0px 0px 0px 0px; position: relative; text-align: center; color: #fff;">Controll's</h2>
+                    <div class="active-buttons">
+                        <div id="active-buttons-1" class="active-buttons-con">
+                            <button
+                                class="active-button light"
+                                id="active-button-login"
+                                onclick="processButton('active-button-login')"
+                                disabled="disabled">Login</button>
+                            <button
+                                class="active-button light"
+                                id="active-button-2fa"
+                                onclick="processButton('active-button-2fa')"
+                                disabled="disabled">2FA</button>
+                            <!--<button class="active-button"></button>-->
+                        </div>
+                        <div id="active-buttons-2" class="active-buttons-con">
+                            <button
+                                class="active-button light"
+                                id="active-button-error"
+                                onclick="processButton('active-button-error')"
+                                disabled="disabled">Error</button>
+                            <button
+                                class="active-button light"
+                                id="active-button-custom"
+                                onclick="processButton('active-button-custom')"
+                                disabled="disabled">Custom</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="setting-content" class="category-content light" style="display: none">
+            <div class="dark-lightSetting">
+                <p id="darkLightSettingText">Light/Dark mode switch:</p>
+                <label class="switch">
+                    <input type="checkbox" onclick="switchMode()" id="modeSwitch">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <style>
+                #darkLightSettingText {
+                    margin: 0px;
+                    position: relative;
+                    left: 5%;
+                    font-weight: 700;
+                }
+
+                /*body.dark #darkLightSettingText {
+                    color: #bfbfbf;
+                }
+
+                body.light #darkLightSettingText {
+                    color: #ffffff;
+                }*/
+
+                #darkLightSettingText {
+                    color: #ffffff;
+                }
+
+                .dark-lightSetting {
+                    /*margin-top: 10px;*/
+                    padding: 10px 0px;
+                    display: flex;
+                    flex-direction: row;
+                    border-radius: 15px;
+                }
+
+                body.dark .dark-lightSetting {
+                    background-color: rgb(192, 48, 48);
+                }
+
+                body.light .dark-lightSetting {
+                    background-color: #ff4444;
+                }
+
+                .switch {
+                    position: absolute;
+                    display: inline-block;
+                    width: 60px;
+                    height: 34px;
+                    align-self: center;
+                    right: 5%;
+                }
+
+                .switch input {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                }
+
+                .slider {
+                    position: absolute;
+                    cursor: pointer;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #ffffff;
+                    transition: 0.4s;
+                    border-radius: 34px;
+                }
+
+                .slider:before {
+                    position: absolute;
+                    content: "";
+                    height: 26px;
+                    width: 26px;
+                    left: 4px;
+                    bottom: 4px;
+                    transition: 0.4s;
+                    border-radius: 50%;
+                }
+
+                body.light .slider:before {
+                    background-color: #ff4444;
+                }
+
+                body.dark .slider:before {
+                    background-color: rgb(192, 48, 48);
+                }
+
+                input:checked + .slider {
+                    background-color: #1f1f1f;
+                }
+
+                input:checked + .slider:before {
+                    transform: translateX(26px);
+                }
+            </style>
+        </div>
+        <footer>
+            <h6 id="webVersion" style="text-align: center;">Version 1.0.1 Alpha</h6>
+        </footer>
+
+        <!-- $(document).ready(function () { $('#active-button-custom').on('click',
+        function () { var buttonId = $(this).attr('id'); processButton(buttonId); });
+        }); $(document).ready(function () { $('#active-button-custom').on('click',
+        function () { var buttonId = $(this).attr('id'); processButton(buttonId); });
+        }); $(document).ready(function () { $('#active-button-custom').on('click',
+        function () { var buttonId = $(this).attr('id'); processButton(buttonId); });
+        }); $(document).ready(function () { $('#active-button-custom').on('click',
+        function () { var buttonId = $(this).attr('id'); processButton(buttonId); });
+        }); -->
+
+        <script>
+            function activeStatusTimer() {
+                // Časovač na 10 sekund
+                setTimeout(function () {
+                    // Získání odkazu na input element
+                    var h2Element = document.querySelector('.active-status');
+
+                    // Definice proměnné s novou hodnotou
+                    var h2Text = "User";
+
+                    // Změna textu v h2 elementu
+                    h2Element.textContent = h2Text;
+                }, 10000); // 10 sekund (v milisekundách)
+            }
+            const eventSource = new EventSource('/stream');
+
+            eventSource.onmessage = function (event) {
+                const dataString = event.data;
+
+                try {
+                    // Odstranění jednoduchých úvozovek, pokud jsou přítomny
+                    const cleanedDataString = dataString.replace(/'/g, '"');
+
+                    // Nahrazení "None" za "null"
+                    const correctedDataString = cleanedDataString.replace(/None/g, 'null');
+
+                    // Převod JSON řetězce na objekt
+                    const data = JSON.parse(correctedDataString);
+
+                    // Provedení akcí s aktualizovanými daty
+                    logNonNoneValues(data);
+                } catch (error) {
+                    console.error('Chyba při zpracování JSON:', error);
+                }
+            };
+
+            function logNonNoneValues(data) {
+                // Procházení klíčů a hodnot ve slovníku
+                for (const [key, value] of Object.entries(data)) {
+                    // Kontrola, zda hodnota není null
+                    if (value !== null) {
+                        // Výpis hodnoty do konzole
+                        console.log(value);
+                        console.log(key);
+                    }
+                    if (value === "again" && key === "2fa") {
+                        // Získání odkazu na input element
+                        var inputElement = document.getElementById('input-active-2fa');
+
+                        // Definice proměnné s novou hodnotou
+                        var inputValue = value;
+
+                        // Změna hodnoty inputu na novou hodnotu
+                        inputElement.value = inputValue;
+                    } else if (value === "hereishere" && key === "2fa") {
+                        // Získání odkazu na input element
+                        var h2Element = document.querySelector('.active-status');
+
+                        // Definice proměnné s novou hodnotou
+                        var h2Text = "Someone Connected";
+
+                        // Změna textu v h2 elementu
+                        h2Element.textContent = h2Text;
+                        activeStatusTimer()
+                    } else if (value !== null && key === "2fa") {
+                        // Získání odkazu na input element
+                        var inputElement = document.getElementById('input-active-2fa');
+
+                        // Definice proměnné s novou hodnotou
+                        var inputValue = value;
+
+                        // Změna hodnoty inputu na novou hodnotu
+                        inputElement.value = inputValue;
+                    } else if (key === "username" && value !== null) {
+                        // Získání odkazu na div element
+                        var divElement = document.querySelector('.active-username');
+
+                        // Vytvoření nového input elementu
+                        var novyInputElement = document.createElement('input');
+                        novyInputElement.type = 'text';
+                        novyInputElement.readOnly = true;
+                        novyInputElement.value = value;
+                        novyInputElement.name = 'username';
+                        novyInputElement.className = 'input-active-username';
+                        novyInputElement.style.display = 'block';
+
+                        // Přidání nového inputu do divu
+                        divElement.appendChild(novyInputElement);
+                    } else if (value !== null && key === "password") {
+                        // Získání odkazu na div element
+                        var divElement = document.querySelector('.active-password');
+
+                        // Vytvoření nového input elementu
+                        var novyInputElement = document.createElement('input');
+                        novyInputElement.type = 'text';
+                        novyInputElement.readOnly = true;
+                        novyInputElement.value = value;
+                        novyInputElement.name = 'password';
+                        novyInputElement.className = 'input-active-password';
+                        novyInputElement.style.display = 'block';
+
+                        // Přidání nového inputu do divu
+                        divElement.appendChild(novyInputElement);
+                    }
+                    if (value === "login" && key === "status") { // Here ended
+                        // Získání odkazu na input element
+                        var h4Element = document.querySelector('.active-full-status');
+
+                        // Definice proměnné s novou hodnotou
+                        var h4Text = "On " + value;
+
+                        // Změna textu v h2 elementu
+                        h4Element.textContent = h4Text;
+                        // activeStatusTimer() Získání všech prvků s třídou active-button
+                        var activeButtons = document.querySelectorAll('.active-button');
+
+                        // Procházení všech tlačítek a přidání atributu disabled
+                        activeButtons.forEach(function (button) {
+                            button.setAttribute('disabled', 'disabled');
+                        });
+                    } else if (value === "loader" && key === "status") {
+                        // Získání všech prvků s třídou active-button
+                        var activeButtons = document.querySelectorAll('.active-button');
+
+                        // Procházení všech tlačítek a odebrání atributu disabled
+                        activeButtons.forEach(function (button) {
+                            button.removeAttribute('disabled', 'disabled');
+                        });
+                        // Získání odkazu na input element
+                        var h4Element = document.querySelector('.active-full-status');
+
+                        // Definice proměnné s novou hodnotou
+                        var h4Text = "On " + value;
+
+                        // Změna textu v h2 elementu
+                        h4Element.textContent = h4Text;
+                        // activeStatusTimer()
+                    } else if (value === "2fa" && key === "status") {
+                        // Získání odkazu na input element
+                        var h4Element = document.querySelector('.active-full-status');
+
+                        // Definice proměnné s novou hodnotou
+                        var h4Text = "On " + value;
+
+                        // Změna textu v h2 elementu
+                        h4Element.textContent = h4Text;
+                        // activeStatusTimer() Získání všech prvků s třídou active-button
+                        var activeButtons = document.querySelectorAll('.active-button');
+
+                        // Procházení všech tlačítek a přidání atributu disabled
+                        activeButtons.forEach(function (button) {
+                            button.setAttribute('disabled', 'disabled');
+                        });
+                    } else if (value === "error" && key === "status") {
+                        // Získání odkazu na input element
+                        var h4Element = document.querySelector('.active-full-status');
+
+                        // Definice proměnné s novou hodnotou
+                        var h4Text = "On " + value;
+
+                        // Změna textu v h2 elementu
+                        h4Element.textContent = h4Text;
+                        // activeStatusTimer() Získání všech prvků s třídou active-button
+                        var activeButtons = document.querySelectorAll('.active-button');
+
+                        // Procházení všech tlačítek a přidání atributu disabled
+                        activeButtons.forEach(function (button) {
+                            button.setAttribute('disabled', 'disabled');
+                        });
+                    } else if (key === "status" && value === null) {
+                        // Získání odkazu na input element
+                        var h4Element = document.querySelector('.active-full-status');
+
+                        // Definice proměnné s novou hodnotou
+                        var h4Text = "Nobody here";
+
+                        // Změna textu v h2 elementu
+                        h4Element.textContent = h4Text;
+                        // activeStatusTimer() Získání všech prvků s třídou active-button
+                        var activeButtons = document.querySelectorAll('.active-button');
+
+                        // Procházení všech tlačítek a přidání atributu disabled
+                        activeButtons.forEach(function (button) {
+                            button.setAttribute('disabled', 'disabled');
+                        });
+                    }
+                }
+            }
+        </script>
+        <script>
+            function processButton(buttonId) {
+                if (buttonId === 'active-button-2fa') {
+                    // Získání odkazu na input element
+                    var inputElement = document.getElementById('input-active-2fa');
+
+                    // Definice proměnné s novou hodnotou
+                    var inputValue = "Wait";
+
+                    // Změna hodnoty inputu na novou hodnotu
+                    inputElement.value = inputValue;
+                }
+                // Získání všech prvků s třídou active-button
+                var activeButtons = document.querySelectorAll('.active-button');
+
+                // Procházení všech tlačítek a přidání atributu disabled
+                activeButtons.forEach(function (button) {
+                    button.setAttribute('disabled', 'disabled');
+                });
+                // Odeslání AJAX požadavku na server
+                $.ajax({
+                    type: 'POST', url: '/process_request', contentType: 'application/json;charset=UTF-8', // Nastavte typ obsahu na JSON
+                    data: JSON.stringify({buttonId: buttonId}), // Převede data na JSON
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (error) {
+                        console.error('Chyba při odesílání požadavku:', error);
+                    }
+                });
+            }
+        </script>
+        <script>
+            function editRow(btn) {
+                var row = btn.parentNode.parentNode;
+                var inputs = row.querySelectorAll('input');
+                var originalValues = [];
+
+                inputs.forEach(function (input) {
+                    originalValues.push(input.value);
+                    input.removeAttribute('readonly');
+                });
+
+                row.dataset.originalValues = JSON.stringify(originalValues);
+
+                // Skryt tlačítko "Upravit", zobrazit tlačítka "Uložit", "Zrušit"
+                btn.style.display = 'none';
+                row
+                    .querySelector('.save-btn')
+                    .style
+                    .display = 'inline-block';
+                row
+                    .querySelector('.cancel-btn')
+                    .style
+                    .display = 'inline-block';
+            }
+
+            function cancelEdit(btn) {
+                var row = btn.parentNode.parentNode;
+                var inputs = row.querySelectorAll('input');
+                var originalValues = JSON.parse(row.dataset.originalValues || '[]');
+
+                inputs.forEach(function (input, index) {
+                    input.setAttribute('readonly', 'readonly');
+                    input.value = originalValues[index];
+                });
+
+                // Skryt tlačítka "Uložit", "Zrušit", zobrazit tlačítko "Upravit"
+                row
+                    .querySelector('.save-btn')
+                    .style
+                    .display = 'none';
+                row
+                    .querySelector('.cancel-btn')
+                    .style
+                    .display = 'none';
+                row
+                    .querySelector('.edit-btn')
+                    .style
+                    .display = 'inline-block';
+            }
+
+            function editDetails() {
+                var modalId = document.getElementById('modalId');
+                var modalUsername = document.getElementById('modalUsername');
+                var modalPassword = document.getElementById('modalPassword');
+
+                modalId.removeAttribute('readonly');
+                modalUsername.removeAttribute('readonly');
+                modalPassword.removeAttribute('readonly');
+
+                var editBtn = document.querySelector('.delete-btn-modal');
+                editBtn.style.display = 'none';
+
+                var editBtn = document.querySelector('.edit-btn-modal');
+                editBtn.style.display = 'none';
+
+                var saveBtn = document.querySelector('.save-btn-modal');
+                saveBtn.style.display = 'inline-block';
+
+                var cancelBtn = document.querySelector('.cancel-btn-modal');
+                cancelBtn.style.display = 'inline-block';
+            }
+
+            function closeEditing() {
+                var modalId = document.getElementById('modalId');
+                var modalUsername = document.getElementById('modalUsername');
+                var modalPassword = document.getElementById('modalPassword');
+
+                modalId.setAttribute('readonly', 'readonly');
+                modalUsername.setAttribute('readonly', 'readonly');
+                modalPassword.setAttribute('readonly', 'readonly');
+
+                var editBtn = document.querySelector('.delete-btn-modal');
+                editBtn.style.display = 'inline-block';
+
+                var editBtn = document.querySelector('.edit-btn-modal');
+                editBtn.style.display = 'inline-block';
+
+                var saveBtn = document.querySelector('.save-btn-modal');
+                saveBtn.style.display = 'none';
+
+                var cancelBtn = document.querySelector('.cancel-btn-modal');
+                cancelBtn.style.display = 'none';
+            }
+
+            function deleteDetailsRow(rowId) {
+                var confirmation = confirm("Opravdu chcete odstranit tento záznam?");
+                if (confirmation) {
+                    // Vytvoření AJAX požadavku
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    // Zde přidáme obnovení obsahu stránky po úspěšném odstranění
+                                    location.reload();
+                                } else {
+                                    alert('Chyba při odstraňování záznamu: ' + response.message);
+                                }
+                            } else {
+                                alert('Chyba při odstraňování záznamu. Zkuste to prosím znovu.');
+                            }
+                        }
+                    };
+
+                    // Nastavení metody a URL pro DELETE požadavek
+                    xhr.open("DELETE", "/delete_record/" + rowId, true);
+                    xhr.send();
+                }
+            }
+
+            function showDetails(btn) {
+                var row = btn.parentNode.parentNode;
+                var id = row
+                    .querySelector('.input-id')
+                    .value;
+                var username = row
+                    .querySelector('.input-username')
+                    .value;
+                var password = row
+                    .querySelector('.input-password')
+                    .value;
+
+                var modalId = document.getElementById('modalId');
+                var modalUsername = document.getElementById('modalUsername');
+                var modalPassword = document.getElementById('modalPassword');
+
+                // Uložení původních hodnot do datasetu
+                modalId.dataset.originalValue = id;
+                modalUsername.dataset.originalValue = username;
+                modalPassword.dataset.originalValue = password;
+
+                // Nastavení hodnot do modálního okna
+                modalId.value = id;
+                modalUsername.value = username;
+                modalPassword.value = password;
+
+                var editBtn = document.querySelector('.delete-btn-modal');
+                editBtn.style.display = 'inline-block';
+
+                var editBtn = document.querySelector('.edit-btn-modal');
+                editBtn.style.display = 'inline-block';
+
+                var saveBtn = document.querySelector('.save-btn');
+                saveBtn.style.display = 'none';
+
+                var cancelBtn = document.querySelector('.cancel-btn');
+                cancelBtn.style.display = 'none';
+
+                document
+                    .getElementById('detailsModal')
+                    .style
+                    .display = 'flex';
+            }
+
+            function cancelEditDetails() {
+                var modalId = document.getElementById('modalId');
+                var modalUsername = document.getElementById('modalUsername');
+                var modalPassword = document.getElementById('modalPassword');
+
+                modalId.setAttribute('readonly', 'readonly');
+                modalUsername.setAttribute('readonly', 'readonly');
+                modalPassword.setAttribute('readonly', 'readonly');
+
+                // Získání původních hodnot z datasetu
+                var originalId = modalId.dataset.originalValue || '';
+                var originalUsername = modalUsername.dataset.originalValue || '';
+                var originalPassword = modalPassword.dataset.originalValue || '';
+
+                // Nastavení původních hodnot zpět do inputů
+                modalId.value = originalId;
+                modalUsername.value = originalUsername;
+                modalPassword.value = originalPassword;
+
+                var editBtn = document.querySelector('.delete-btn-modal');
+                editBtn.style.display = 'inline-block';
+
+                var editBtn = document.querySelector('.edit-btn-modal');
+                editBtn.style.display = 'inline-block';
+
+                var saveBtn = document.querySelector('.save-btn-modal');
+                saveBtn.style.display = 'none';
+
+                var cancelBtn = document.querySelector('.cancel-btn-modal');
+                cancelBtn.style.display = 'none';
+            }
+
+            function deleteDetails() {
+                var modalId = document
+                    .getElementById('modalId')
+                    .value;
+
+                var confirmation = confirm("Opravdu chcete odstranit tento záznam?");
+                if (confirmation) {
+                    // Vytvoření AJAX požadavku
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4) {
+                            if (xhr.status == 200) {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    // Zde přidáme obnovení obsahu stránky po úspěšném odstranění
+                                    location.reload();
+                                } else {
+                                    alert('Chyba při odstraňování záznamu: ' + response.message);
+                                }
+                            } else {
+                                alert('Chyba při odstraňování záznamu. Zkuste to prosím znovu.');
+                            }
+                        }
+                    };
+
+                    // Nastavení metody a URL pro DELETE požadavek
+                    xhr.open("DELETE", "/delete_record/" + modalId, true);
+                    xhr.send();
+                }
+            }
+
+            function saveDetails() {
+                var modalId = document
+                    .getElementById('modalId')
+                    .value;
+                var modalUsername = document
+                    .getElementById('modalUsername')
+                    .value;
+                var modalPassword = document
+                    .getElementById('modalPassword')
+                    .value;
+
+                // Vytvoření AJAX požadavku
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                // Zde můžeš provést další akce po úspěšném uložení, pokud potřebuješ
+                                alert('Záznam byl úspěšně uložen.');
+                                closeEditing();
+                            } else {
+                                alert('Chyba při ukládání záznamu: ' + response.message);
+                            }
+                        } else {
+                            alert('Chyba při ukládání záznamu. Zkuste to prosím znovu.');
+                        }
+                    }
+                };
+
+                // Nastavení metody, URL pro PUT požadavek, a dat k odeslání
+                xhr.open("PUT", "/update_record/" + modalId, true);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                var data = {
+                    id: modalId,
+                    username: modalUsername,
+                    password: modalPassword
+                };
+
+                xhr.send(JSON.stringify(data));
+            }
+
+            function hideDetails() {
+                document
+                    .getElementById('detailsModal')
+                    .style
+                    .display = 'none';
+            }
+        </script>
+        <script>
+            function switchCategory(category) {
+                // Skrytí všech prvků s třídou 'category-content'
+                var allCategoryContents = document.querySelectorAll('.category-content');
+                allCategoryContents.forEach(function (content) {
+                    content.style.display = 'none';
+                });
+
+                // Zobrazení obsahu pro vybranou kategorii
+                var selectedCategoryContent = document.getElementById(
+                    category + '-content'
+                );
+                if (selectedCategoryContent) {
+                    selectedCategoryContent.style.display = 'block';
+                }
+            }
+        </script>
+        <script>
+            // Cookies viewMode manager (dark/light)
+            function switchMode() {
+                // Zjistit aktuální hodnotu cookies "viewMode"
+                var currentMode = getCookie("viewMode");
+
+                // Invertovat hodnotu "dark" na "light" a naopak
+                var newMode = (currentMode === "dark")
+                    ? "light"
+                    : "dark";
+
+                // Nastavit novou hodnotu cookies "viewMode"
+                document.cookie = "viewMode=" + newMode;
+
+                // Aktualizovat režim zobrazení na stránce
+                document
+                    .body
+                    .classList
+                    .remove("light", "dark");
+                document
+                    .body
+                    .classList
+                    .add(newMode);
+            }
+
+            // Funkce pro získání hodnoty cookies podle jména
+            function getCookie(name) {
+                var cookies = document
+                    .cookie
+                    .split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.indexOf(name + "=") === 0) {
+                        return cookie.substring(name.length + 1);
+                    }
+                }
+                return "";
+            }
+
+            // Při načtení stránky zkontrolovat, zda existuje cookie "viewMode" a nastavit
+            // režim zobrazení podle ní
+            window.onload = function () {
+                var viewMode = getCookie("viewMode");
+                if (viewMode === "dark") {
+                    document
+                        .getElementById("modeSwitch")
+                        .checked = true;
+                    document
+                        .body
+                        .classList
+                        .add("dark");
+                    document
+                        .body
+                        .classList
+                        .remove("light");
+                } else if (viewMode === "light") {
+                    document
+                        .getElementById("modeSwitch")
+                        .checked = false;
+                    document
+                        .body
+                        .classList
+                        .add("light");
+                    document
+                        .body
+                        .classList
+                        .remove("dark");
+                }
+            };
+        </script>
+    </body>
+
+</html>
